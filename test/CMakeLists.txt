@@ -1,0 +1,13 @@
+function(build_test test_name)
+  # message(STATUS "Add test \"${test_name}\"")
+  add_executable(${test_name} ${CMAKE_CURRENT_SOURCE_DIR}/${test_name}.cc)
+  target_link_libraries(${test_name} PRIVATE ${CMAKE_PROJECT_NAME})
+  target_include_directories(${test_name} PRIVATE ${${CMAKE_PROJECT_NAME}_INCLUDES})
+  target_compile_features(${test_name} PUBLIC cxx_std_17)
+endfunction()
+
+file(GLOB test_paths LIST_DIRECTORIES false ${CMAKE_CURRENT_SOURCE_DIR}/*.cc)
+foreach(test_path ${test_paths})
+  get_filename_component(test_src ${test_path} NAME_WE)
+  build_test(${test_src})
+endforeach()
