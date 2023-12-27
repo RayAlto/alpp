@@ -1,13 +1,8 @@
 #include "alpp/device.h"
 
 #include <cstddef>
-#include <cstdint>
 #include <iostream>
 #include <vector>
-
-void foo(const char* file, const std::uint_fast32_t line) {
-  std::cout << "In " << file << ", line " << line << '\n';
-}
 
 int main(int argc, const char* argv[]) {
   std::vector<alpp::Device> devices = alpp::Device::get_devices();

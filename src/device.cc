@@ -11,31 +11,26 @@
 
 #include "alpp/util.h"
 
-constexpr std::string_view OPENAL_SOFT_PREFIX = "OpenAL Soft on ";
-constexpr std::size_t OPENAL_SOFT_PREFIX_LEN = OPENAL_SOFT_PREFIX.length();
+constexpr static const std::string_view OPENAL_SOFT_PREFIX = "OpenAL Soft on ";
+constexpr static const std::size_t OPENAL_SOFT_PREFIX_LEN = OPENAL_SOFT_PREFIX.length();
 
 namespace alpp {
 
-struct Device::AL {
-  ALCdevice* alc_device;
-};
+Device::Device() : alc_device_(nullptr){};
 
-Device::Device() : al_(nullptr){};
-
-Device::Device(const std::string& str) : al_(nullptr), name_(str) {
+Device::Device(const std::string& str) : alc_device_(nullptr), name_(str) {
   sanitize_name_();
 }
 
-Device::Device(std::string&& str) : al_(nullptr), name_(std::move(str)) {
+Device::Device(std::string&& str) : alc_device_(nullptr), name_(std::move(str)) {
   sanitize_name_();
 }
 
 Device::~Device() {
-  if (al_ == nullptr) {
+  if (alc_device_ == nullptr) {
     return;
   }
-
-  delete al_;
+  alcCloseDevice(reinterpret_cast<ALCdevice*>(alc_device_));
 }
 
 std::string_view Device::name() const {
@@ -43,13 +38,12 @@ std::string_view Device::name() const {
 }
 
 bool Device::open() {
-  if (al_ != nullptr) {
+  if (alc_device_ != nullptr) {
     return true;
   }
-  al_ = new Device::AL;
-  al_->alc_device = (this == &DEFAULT) ? alcOpenDevice(nullptr) : alcOpenDevice(name_.c_str());
+  alc_device_ = (this == &DEFAULT) ? alcOpenDevice(nullptr) : alcOpenDevice(name_.c_str());
   AL_CHECK_ERROR();
-  return al_->alc_device != nullptr;
+  return alc_device_ != nullptr;
 }
 
 const Device Device::DEFAULT{};

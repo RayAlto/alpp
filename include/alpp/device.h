@@ -27,8 +27,7 @@ protected:
   explicit Device(const std::string& str);
   explicit Device(std::string&& str);
 
-  struct AL;
-  AL* al_;
+  void* alc_device_;
 
   std::string name_;
   std::string_view name_sanitized_;

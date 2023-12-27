@@ -7,7 +7,7 @@
 
 namespace alpp {
 
-void al_check_error(const char*  file,  std::uint_fast32_t line);
+void al_check_error(const char* file, std::uint_fast32_t line);
 
 } // namespace alpp
 
