@@ -18,9 +18,13 @@ public:
 
   [[nodiscard]] std::string_view name() const;
   bool open();
+  [[nodiscard]] bool is_opened() const;
 
   static const Device DEFAULT;
   static const std::vector<Device>& get_devices(bool refresh = true);
+
+  friend bool operator==(const Device& l, const Device& r);
+  friend bool operator!=(const Device& l, const Device& r);
 
 protected:
   Device();

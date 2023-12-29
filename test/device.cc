@@ -1,18 +1,20 @@
 #include "alpp/device.h"
 
 #include <cstddef>
-#include <iostream>
+#include <cstdio>
 #include <vector>
 
 int main(int argc, const char* argv[]) {
-  std::vector<alpp::Device> devices = alpp::Device::get_devices();
-  for (std::size_t i = 0; i < devices.size(); i++) {
-    std::cout << i + 1 << ". " << devices[i].name() << '\n';
+  std::vector<alpp::Device> d0 = alpp::Device::get_devices();
+  std::printf("========== devices ==========\n");
+  for (std::size_t i = 0; i < d0.size(); i++) {
+    std::printf("%02d. %s\n", i + 1, d0[i].name().data());
   }
-  std::cout << "Your choice: ";
-  std::size_t choice{0};
-  std::cin >> choice;
-  choice--;
-  std::cout << "Using device '" << devices[choice].name() << "'\n";
+  std::vector<alpp::Device> d1 = alpp::Device::get_devices();
+  std::printf("========== devices ==========\n");
+  for (std::size_t i = 0; i < d1.size(); i++) {
+    std::printf("%02d. %s\n", i + 1, d1[i].name().data());
+  }
+  std::printf("%s\n", (d0 == d1 ? "fine" : "fuck"));
   return 0;
 }

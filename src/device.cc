@@ -4,6 +4,7 @@
 #include <cstring>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -46,10 +47,14 @@ bool Device::open() {
   return alc_device_ != nullptr;
 }
 
+bool Device::is_opened() const {
+  return alc_device_ != nullptr;
+}
+
 const Device Device::DEFAULT{};
 
 const std::vector<Device>& Device::get_devices(bool refresh) {
-  if (!refresh) {
+  if (!refresh && !devices_.empty()) {
     return devices_;
   }
   devices_.clear();
@@ -71,6 +76,17 @@ const std::vector<Device>& Device::get_devices(bool refresh) {
     dev_str_end += 1;
   }
   return devices_;
+}
+
+bool operator==(const Device& l, const Device& r) {
+  if (&l == &r) {
+    return true;
+  }
+  return std::tie(l.alc_device_, l.name_) == std::tie(r.alc_device_, r.name_);
+}
+
+bool operator!=(const Device& l, const Device& r) {
+  return !(l == r);
 }
 
 void Device::sanitize_name_() {
